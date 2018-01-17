@@ -8,7 +8,7 @@
  */
 using System;
 
-namespace expertmm
+namespace ProgChooser
 {
 	/// <summary>
 	/// Description of ProgInfo.

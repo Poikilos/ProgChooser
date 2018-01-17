@@ -11,7 +11,7 @@ using System.Diagnostics; //Process etc
 using System.IO; //File etc
 using System.Collections;
 
-namespace expertmm {
+namespace ProgChooser {
 	/// <summary>
 	/// ProgChooser
 	/// </summary>

@@ -9,7 +9,7 @@
 using System;
 using System.Collections;
 
-namespace expertmm {
+namespace ProgChooser {
 	/// <summary>
 	/// Description of ExtensionInfo.
 	/// </summary>

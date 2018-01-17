@@ -12,7 +12,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections;
 
-namespace expertmm
+namespace ProgChooser
 {
 	/// <summary>
 	/// Description of MainForm.

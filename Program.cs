@@ -9,7 +9,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace expertmm
+namespace ProgChooser
 {
 	/// <summary>
 	/// Class with program entry point.
