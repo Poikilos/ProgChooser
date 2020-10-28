@@ -118,7 +118,7 @@ namespace ProgChooser {
 			for (int index=0; index<paths.Length; index++) {
 				captions[index] = caption;
 			}
-			return AddChoice(ext, captions, paths, hotkeyI);
+			return AddChoice(ext, paths, captions, hotkeyI);
 		}
 		public static bool AddChoice(string ext, string[] paths, string[] captions, int hotkeyI) {
 			string sExeNow = null;
@@ -130,6 +130,9 @@ namespace ProgChooser {
 						sExeNow = paths[index];
 						Console.Error.WriteLine("found " + sExeNow);
 						foundI = index;
+					}
+					else {
+						Console.Error.WriteLine("no " + paths[index]);
 					}
 				}
 				catch {
@@ -215,6 +218,17 @@ namespace ProgChooser {
 				},
 				"SharpDevelop 3",
 				3
+			);
+			AddChoice(
+				"sln",
+				new[] {
+					@"C:\Program Files (x86)\SharpDevelop\4.4\bin\SharpDevelop.exe",
+					@"C:\Program Files\SharpDevelop\4.4\bin\SharpDevelop.exe",
+					"E:\\PortableApps\\Programming\\SharpDevelop\\4.4\\bin\\SharpDevelop.exe",
+					"C:\\PortableApps\\Programming\\SharpDevelop\\4.4\\bin\\SharpDevelop.exe"
+				},
+				"SharpDevelop 4",
+				4
 			);
 			AddChoice(
 				"sln",
