@@ -113,181 +113,145 @@ namespace ProgChooser {
 				break;
 			}
 		}
+		public static bool AddChoice(string ext, string[] paths, string caption, int hotkeyI) {
+			string[] captions = new string[paths.Length];
+			for (int index=0; index<paths.Length; index++) {
+				captions[index] = caption;
+			}
+			return AddChoice(ext, captions, paths, hotkeyI);
+		}
+		public static bool AddChoice(string ext, string[] paths, string[] captions, int hotkeyI) {
+			string sExeNow = null;
+			int foundI = -1;
+			Console.Error.WriteLine("checking for program for " + ext);
+			for (int index=0; index<paths.Length; index++) {
+				try {
+					if (File.Exists(paths[index])) {
+						sExeNow = paths[index];
+						Console.Error.WriteLine("found " + sExeNow);
+						foundI = index;
+					}
+				}
+				catch {
+					if (paths[index] != null) {
+						Console.Error.WriteLine("Path "
+						                        + index.ToString()
+						                        + " is bad for "
+						                        + ext + ": \""
+						                        + paths[index] + "\"");
+					}
+					else {
+						Console.Error.WriteLine("Path "
+						                        + index.ToString()
+						                        + " is bad for "
+						                        + ext);
+					}
+				} // if path is bad, don't care
+			}
+			if (sExeNow != null) {
+				ProgChooser.ForceAddChoice("sln", sExeNow, captions[foundI], hotkeyI);
+			}
+			else {
+				// ALWAYS add it, so that the number key corresponding
+				// to kotkeyI opens the matching sequential version.
+				ProgChooser.ForceAddChoice("sln", paths[0], "NONE (no " + captions[0] + " found)", hotkeyI);
+			}
+			return sExeNow != null;
+		}
 		/// <summary>
 		/// Load the programs for the extension of the program in the parameters
 		/// </summary>
 		/// <param name="programArgs"></param>
 		/// <returns>Returns error message, otherwise null if status is good.</returns>
 		public static string load(string[] programArgs) {
-			lastErrorString=null;
-			string errorString=null;
-			try {
-				ProgChooser.IsAnswered=false;
-				//int proginfoarrNow_Max=10;
-				//ProgInfo[] proginfoarrNow=new ProgInfo[proginfoarrNow_Max];
-				//int extinfoNow.ProgramCount=0;
-				//proginfoarrNow[extinfoNow.ProgramCount].Title="SharpDevelop 3.0";
-				//proginfoarrNow[extinfoNow.ProgramCount].FullName="C:\\PortableApps\\Programming\\SharpDevelop\\3.0\\bin\\SharpDevelop.exe";
-				//extinfoNow.ProgramCount++;
-				//proginfoarrNow[extinfoNow.ProgramCount].Title="Microsoft Visual C++ 2008 Express Edition";
-				//proginfoarrNow[extinfoNow.ProgramCount].FullName="C:\\Program Files\\Microsoft Visual Studio 9.0\\Common7\\IDE\\VCExpress.exe";
-				//extinfoNow.ProgramCount++;
-				
-				/// ADD PROGRAMS BY EXTENSION ///
-				sParticiple="adding known extension";
-				
-				//SharpDevelop 3.x:
-				ProgChooser.AddExtension("sln");
-				sParticiple="adding programs";
-				bool IsGood=false;
-				string sExeNow="";
-				
-				sExeNow=@"C:\Program Files (x86)\SharpDevelop\1.1\bin\SharpDevelop.exe";
-				try {
-					string sExeAlt=@"C:\Program Files\SharpDevelop\1.1\bin\SharpDevelop.exe";
-					if (File.Exists(sExeAlt)) {
-						sExeNow=sExeAlt;
-					}
-				}
-				catch {}//dont care
-				
-				IsGood=false;
-				if (File.Exists(sExeNow)) {
-					ProgChooser.AddProg("sln",sExeNow,"SharpDevelop 1",1);
-					IsGood=true;
-				}
-				else {//if (!IsGood) {
-					//ALWAYS add, so that 1 key on keyboard opens version 1
-					ProgChooser.AddProg("sln",sExeNow,"NONE (no SharpDevelop 1 found)",1);
-				}
-				
-				
-				sExeNow=@"C:\Program Files (x86)\SharpDevelop\2.2\bin\SharpDevelop.exe";
-				try {
-					string sExeAlt=@"C:\Program Files\SharpDevelop\2.2\bin\SharpDevelop.exe";
-					if (File.Exists(sExeAlt)) {
-						sExeNow=sExeAlt;
-					}
-				}
-				catch {}//dont care
-				
-				IsGood=false;
-				try {
-					if (File.Exists(sExeNow)) {
-						ProgChooser.AddProg("sln",sExeNow,"SharpDevelop 2",2);
-						IsGood=true;
-					}
-				}
-				catch {}//don't care
-				if (!IsGood) {
-					//ALWAYS add, so that 2 key on keyboard opens version 2
-					ProgChooser.AddProg("sln",sExeNow,"NONE (no SharpDevelop 2 found)",2);
-				}
-				
-				sExeNow="C:\\Program Files (x86)\\SharpDevelop\\3.0\\bin\\SharpDevelop.exe";
-				try {
-					string sExeAlt="E:\\PortableApps\\Programming\\SharpDevelop\\3.0\\bin\\SharpDevelop.exe";
-					if (File.Exists(sExeAlt)) {
-						sExeNow=sExeAlt;
-					}
-				}
-				catch {
-					
-				}
-				try {
-					string sExeAlt="C:\\PortableApps\\Programming\\SharpDevelop\\3.0\\bin\\SharpDevelop.exe";
-					if (File.Exists(sExeAlt)) {
-						sExeNow=sExeAlt;
-					}
-				}
-				catch {
-					
-				}
-				try {
-					string sExeAlt="C:\\Program Files\\SharpDevelop\\3.0\\bin\\SharpDevelop.exe";
-					if (File.Exists(sExeAlt)) {
-						sExeNow=sExeAlt;
-					}
-				}
-				catch {
-					
-				}
-				IsGood=false;
-				
-				try {
-					if (File.Exists(sExeNow)) {
-						ProgChooser.AddProg("sln",sExeNow,"SharpDevelop 3",3);
-						IsGood=true;
-					}
-				}
-				catch {}//don't care
-				if (!IsGood) {
-					//ALWAYS add, so that 3 key on keyboard opens version 3
-					ProgChooser.AddProg("sln",sExeNow,"NONE (no SharpDevelop 3 found)",3);
-				}
-				
-				
-				//Visual C++:
-				sExeNow="C:\\Program Files\\Microsoft Visual Studio 9.0\\Common7\\IDE\\VCExpress.exe";
-				try {
-					string sExeAlt="E:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\Common7\\IDE\\VCExpress.exe";
-					if (File.Exists(sExeAlt)) {
-						sExeNow=sExeAlt;
-					}
-				}
-				catch {
-					
-				}
-				if (File.Exists(sExeNow)) ProgChooser.AddProg("sln",sExeNow,"Microsoft Visual Studio 9.0 (C++ 2008) Express Edition",9);
-				else ProgChooser.AddProg("sln",sExeNow,"NONE (no Microsoft Visual Studio 9.0 (C++ 2008) Express Edition found)",9);
-				
-				try {
-					string sExeAlt="E:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\Common7\\IDE\\vcsexpress.exe";
-					if (File.Exists(sExeAlt)) {
-						sExeNow=sExeAlt;
-					}
-				}
-				catch {
-					
-				}
-				try {
-					string sExeAlt="C:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\Common7\\IDE\\vcsexpress.exe";
-					if (File.Exists(sExeAlt)) {
-						sExeNow=sExeAlt;
-					}
-				}
-				catch {
-					
-				}
-				try {
-					string sExeAlt=@"C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE\WDExpress.exe";
-					if (File.Exists(sExeAlt)) {
-						sExeNow=sExeAlt;
-					}
-				}
-				catch {
-					
-				}
-				if (File.Exists(sExeNow)) ProgChooser.AddProg("sln",sExeNow,"Microsoft Visual C# 2008 Express Edition",0);
-				else ProgChooser.AddProg("sln",sExeNow,"NONE (no Microsoft Visual C# 2008 Express Edition found)",0);
-				
-				sExeNow=@"C:\Program Files (x86)\SharpDevelop\5.1\bin\SharpDevelop.exe";
-				try {
-					string sExeAlt=@"C:\Program Files\SharpDevelop\5.1\bin\SharpDevelop.exe";
-					if (File.Exists(sExeAlt)) {
-						sExeNow=sExeAlt;
-					}
-				}
-				catch {
-					
-				}
-				if (File.Exists(sExeNow)) ProgChooser.AddProg("sln",sExeNow,"SharpDevelop 5.1",5);
-				else ProgChooser.AddProg("sln",sExeNow,"NONE (no SharpDevelop 5.1 found)",5);
-					
-			}
-			catch (Exception exn) {
-				ProgChooser.Error_WriteLine("Could not finish ProgChooserDefaults load for the following reason:"+exn.ToString());
-			}			
+			lastErrorString = null;
+			string errorString = null;
+			//try {
+			ProgChooser.IsAnswered=false;
+			//int proginfoarrNow_Max=10;
+			//ProgInfo[] proginfoarrNow=new ProgInfo[proginfoarrNow_Max];
+			//int extinfoNow.ProgramCount=0;
+			//proginfoarrNow[extinfoNow.ProgramCount].Title="SharpDevelop 3.0";
+			//proginfoarrNow[extinfoNow.ProgramCount].FullName="C:\\PortableApps\\Programming\\SharpDevelop\\3.0\\bin\\SharpDevelop.exe";
+			//extinfoNow.ProgramCount++;
+			//proginfoarrNow[extinfoNow.ProgramCount].Title="Microsoft Visual C++ 2008 Express Edition";
+			//proginfoarrNow[extinfoNow.ProgramCount].FullName="C:\\Program Files\\Microsoft Visual Studio 9.0\\Common7\\IDE\\VCExpress.exe";
+			//extinfoNow.ProgramCount++;
+			
+			/// ADD PROGRAMS BY EXTENSION ///
+			sParticiple = "adding known extension";
+			
+			//SharpDevelop 3.x:
+			ProgChooser.AddExtension("sln");
+			sParticiple = "adding programs";
+			
+			Console.Error.WriteLine(sParticiple);
+			
+			AddChoice(
+				"sln",
+				new[] {
+					@"C:\Program Files (x86)\SharpDevelop\1.1\bin\SharpDevelop.exe",
+					@"C:\Program Files\SharpDevelop\1.1\bin\SharpDevelop.exe"
+				},
+				"SharpDevelop 1",
+				1
+			);
+			AddChoice(
+				"sln",
+				new[] {
+					@"C:\Program Files (x86)\SharpDevelop\2.2\bin\SharpDevelop.exe",
+					@"C:\Program Files\SharpDevelop\2.2\bin\SharpDevelop.exe"
+				},
+				"SharpDevelop 2",
+				2
+			);
+			AddChoice(
+				"sln",
+				new[] {
+					"C:\\Program Files (x86)\\SharpDevelop\\3.0\\bin\\SharpDevelop.exe",
+					"E:\\PortableApps\\Programming\\SharpDevelop\\3.0\\bin\\SharpDevelop.exe",
+					"C:\\PortableApps\\Programming\\SharpDevelop\\3.0\\bin\\SharpDevelop.exe",
+					"C:\\Program Files\\SharpDevelop\\3.0\\bin\\SharpDevelop.exe"
+				},
+				"SharpDevelop 3",
+				3
+			);
+			AddChoice(
+				"sln",
+				new[] {
+					@"C:\Program Files (x86)\SharpDevelop\5.1\bin\SharpDevelop.exe",
+					@"C:\Program Files\SharpDevelop\5.1\bin\SharpDevelop.exe"
+				},
+				"SharpDevelop 5.1",
+				5
+			);
+			AddChoice(
+				"sln",
+				new[] {
+					"C:\\Program Files\\Microsoft Visual Studio 9.0\\Common7\\IDE\\VCExpress.exe",
+					"E:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\Common7\\IDE\\VCExpress.exe"
+				},
+				"Microsoft Visual Studio 9.0 (C++ 2008) Express Edition",
+				9
+			);
+			AddChoice(
+				"sln",
+				new[] {
+					"E:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\Common7\\IDE\\vcsexpress.exe",
+					"C:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\Common7\\IDE\\vcsexpress.exe",
+					@"C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE\WDExpress.exe"
+				},
+				new[] {
+					"Microsoft Visual C# 2008 Express Edition",
+					"Microsoft Visual C# 2008 Express Edition",
+					"Microsoft Visual C# 2012 Express Edition"
+				},
+				0
+			);
+			//}
+			//catch (Exception exn) {
+			//	ProgChooser.Error_WriteLine("Could not finish ProgChooserDefaults load for the following reason:"+exn.ToString());
+			//}			
 			ProgChooser.setOpenedFileFullNameFrom(programArgs);
 			
 //			if (ProgChooser.getOpenedFileFullName()!=null) {
@@ -344,12 +308,12 @@ namespace ProgChooser {
 			}
 			return iReturn;
 		}//end IndexOfExt
-		public static void AddProg(string sExt, string Prog_FullName, string Prog_Title, int index) {
-			int iExt=IndexOfExt(sExt);
-			if (iExt>=0) {
-				extinfoarr[iExt].AddProg(Prog_FullName,Prog_Title, index);
+		public static void ForceAddChoice(string sExt, string Prog_FullName, string Prog_Title, int index) {
+			int iExt = IndexOfExt(sExt);
+			if (iExt >= 0) {
+				extinfoarr[iExt].ForceAddChoice(Prog_FullName, Prog_Title, index);
 			}
 			else Console.Error.WriteLine("Error: "+Prog_FullName+" cannot be added--You first need to add the extension \""+sExt+"\"");
-		}//end AddProg
+		}//end ForceAddChoice
 	}//end ProgChooser
 }//end ProgChooser namespace

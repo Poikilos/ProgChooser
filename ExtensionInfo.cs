@@ -93,10 +93,10 @@ namespace ProgChooser {
 			}
 			return thisAL;
 		}
-//		public bool AddProg(string Prog_FullName, string Prog_Title) {
-//			return AddProg(Prog_FullName, Prog_Title, getFreeIndex());
+//		public bool ForceAddChoice(string Prog_FullName, string Prog_Title) {
+//			return ForceAddChoice(Prog_FullName, Prog_Title, getFreeIndex());
 //		}
-		public bool AddProg(string Prog_FullName, string Prog_Title, int index) {
+		public bool ForceAddChoice(string Prog_FullName, string Prog_Title, int index) {
 			bool IsAdded=false;
 			if (index<proginfoarr.Length) {
 				if (proginfoarr[index]==null) proginfoarr[index]=new ProgInfo();
